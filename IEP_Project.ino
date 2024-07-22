@@ -10,11 +10,11 @@
 
 // Global variable
 int knobValue;
-int knobArr[3];
+int knobArr[4];
 int K1Counter;
 int average;
 
-// 
+// Creating class for four digit display
 TM1637 disp(CLK,DIO);
 
 // Function declaration
@@ -41,6 +41,8 @@ void loop(){
     getValue();
     average = getAverage();
     disp.display(average);
+    // Write for the Bud light
+    // Divide 1024 to 4 groups, for first range LED4(YELLOW), for second range LED3(BLUE) and so on ....
   }
 }
 
@@ -69,7 +71,7 @@ void getValue(){
 // Calculating average value from three value of petitometer
 int getAverage(){
   int sum, avg;
-  for(int i=0; i<3; i++)
+  for(int i=0; i=<3; i++)
     sum = knobArr[i];
   avg = sum/4;
   return avg;

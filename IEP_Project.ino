@@ -1,6 +1,8 @@
 // Header files 
 #include "RichShieldDHT.h"
-#include "RichShieldTM1637.h" 
+#include "RichShieldTM1637.h"
+#include <Wire.h> 
+#include "RichShieldPassiveBuzzer.h" 
 
 // Define Macro 
 #define BUTTONK1 8 
@@ -12,7 +14,8 @@
 #define LED_YELLOW 7  
 #define LED_BLUE 6  
 #define LED_GREEN 5  
- 
+#define PassiveBuzzerPin 3  
+
 // Global variable 
 int knobValue; 
 int knobArr[4]; 
@@ -21,6 +24,7 @@ int average;
 
 // Creating class for four digit display 
 TM1637 disp(CLK,DIO); 
+PassiveBuzzer buz(PassiveBuzzerPin); 
 
 // Function declaration 
 void getValue(); 
@@ -28,7 +32,9 @@ int getAverage();
 void setK1Counter(); 
 void clearDisplay(); 
 void ledDisplay(); 
-void displayValue();
+void displayValue(); 
+void buzzer(); 
+
 
 // Setup function 
 void setup(){
@@ -36,23 +42,27 @@ void setup(){
   pinMode(BUTTONK1, INPUT_PULLUP); 
   Serial.begin(9600); 
   disp.init(); 
-  pinMode(LED_RED,OUTPUT); 
-  pinMode(LED_GREEN,OUTPUT); 
-  pinMode(LED_BLUE,OUTPUT); 
-  pinMode(LED_YELLOW,OUTPUT); 
+  pinMode(LED_RED, OUTPUT); 
+  pinMode(LED_GREEN, OUTPUT); 
+  pinMode(LED_BLUE, OUTPUT); 
+  pinMode(LED_YELLOW, OUTPUT); 
 } 
+
 
 // Loop function 
 void loop(){ 
   if(digitalRead(BUTTONK2) == 0){ 
     clearDisplay();
   while(digitalRead(BUTTONK2) == 0); 
-    getValue(); 
+
+  getValue(); 
   average = getAverage();
-  displayValue(average); 
   ledDisplay(); 
+  displayValue(average);
+  buzzer(); 
   }
 }
+
 
 // Getting value from petitometer 
 void getValue(){ 
@@ -76,11 +86,10 @@ void getValue(){
   } 
 } 
 
+
 // Calculating average value from three value of petitometer 
 int getAverage(){ 
-
-  double sum = 0, avg = 0;
-
+  double sum=0, avg=0;
   for(int i=0; i<=3; i++) 
     sum += knobArr[i];
 
@@ -88,59 +97,63 @@ int getAverage(){
   return avg; 
 } 
 
+
 // Button K1, opening the application and restarting it 
 void setK1Counter(){ 
   if(digitalRead(BUTTONK1) == 0){ 
+    
     if(!K1Counter) K1Counter = 1; 
   else K1Counter = 0; 
   } 
   while(digitalRead(BUTTONK1) == 0); 
 } 
 
+
 // Clearing out display in 4 digit segment 
 void clearDisplay(){ 
   for(int i=0; i<4; i++) 
     disp.display(i, 16); 
-    pinMode(LED_RED, LOW);
-    pinMode(LED_GREEN, LOW);
-    pinMode(LED_BLUE, LOW);
-    pinMode(LED_YELLOW, LOW);
+    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_GREEN, LOW);
+    digitalWrite(LED_BLUE, LOW);
+    digitalWrite(LED_YELLOW, LOW);
 } 
 
+
 void ledDisplay() { 
-  if( average >=0 && average <=256 ) { 
+  if( average > 0 && average <=256 ) { 
    Serial.println(average); 
-   digitalWrite(LED_YELLOW,HIGH); 
-   Serial.print("Hello"); 
+   digitalWrite(LED_YELLOW, HIGH); 
   } 
   else{ 
     digitalWrite(LED_YELLOW,LOW); 
   } 
 
- if( average >=257 && average <=512 ) { 
-  digitalWrite(LED_BLUE,HIGH);   
+  if( average >=257 && average <=512 ) { 
+    digitalWrite(LED_BLUE,HIGH);   
   } 
   else{ 
-  digitalWrite(LED_BLUE,LOW); 
- } 
+    digitalWrite(LED_BLUE,LOW); 
+  } 
 
   if( average >=513 && average <=768 ) { 
     digitalWrite(LED_GREEN,HIGH);  
   } 
   else{ 
     digitalWrite(LED_GREEN,LOW); 
- } 
+  } 
 
   if( average >=769 && average <=1023 ) { 
     digitalWrite(LED_RED,HIGH); 
- } 
+  } 
   else{ 
     digitalWrite(LED_RED,LOW); 
- } 
+  } 
 }  
 
-void displayValue(int average){
-  int8_t temp[4];
+void displayValue(int average) {
+
+   int8_t temp[4];
   
   if(average < 1000) temp[0] = INDEX_BLANK;
   else temp[0] = average/1000;
@@ -151,5 +164,13 @@ void displayValue(int average){
   
   temp[2] = average / 10;
   temp[3] = average % 10;   
-  disp.display(temp);//disp object calls TM1637 class member function to display numbers stored in temp array
-}
+  disp.display(temp);
+} 
+
+void buzzer() { 
+  if(average<=256) 
+  { 
+    buz.playTone(523, 3000); 
+    //delay(1000);
+  } 
+} 

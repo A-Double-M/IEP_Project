@@ -90,11 +90,12 @@ void getValue(){
 
 // Set a counter to start selecting value, pressed again to finish selecting
 void setK1Counter(){ 
-  if(digitalRead(BUTTONK1) == 0){ 
-    
-    if(!K1Counter) K1Counter = 1; 
-  else K1Counter = 0; 
-  } 
+  if(digitalRead(BUTTONK1) == 0)
+    if(!K1Counter) 
+      K1Counter = 1; 
+    else 
+      K1Counter = 0;
+      
   while(digitalRead(BUTTONK1) == 0); 
 } 
 
@@ -113,11 +114,12 @@ int getAverage(){
 // Clearing out display in 4 digit segment and previously used LED
 void clearDisplay(){ 
   for(int i=0; i<4; i++) 
-    disp.display(i, 16); 
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, LOW);
-    digitalWrite(LED_BLUE, LOW);
-    digitalWrite(LED_YELLOW, LOW);
+    disp.display(i, 16);
+
+  digitalWrite(LED_RED, LOW);
+  digitalWrite(LED_GREEN, LOW);
+  digitalWrite(LED_BLUE, LOW);
+  digitalWrite(LED_YELLOW, LOW);
 } 
 
 

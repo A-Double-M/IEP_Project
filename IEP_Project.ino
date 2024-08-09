@@ -126,34 +126,17 @@ void clearDisplay(){
 // Light up one LED based on average petitiometer value
 void ledDisplay() { 
   Serial.println(average);
-  
-  if( average > 0 && average <=256 ) {   
+
+  if( average > 0 && average <=256 )
    digitalWrite(LED_YELLOW, HIGH); 
-  } 
-  else{ 
-    digitalWrite(LED_YELLOW,LOW); 
-  } 
-
-  if( average >=257 && average <=512 ) { 
-    digitalWrite(LED_BLUE,HIGH);   
-  } 
-  else{ 
-    digitalWrite(LED_BLUE,LOW); 
-  } 
-
-  if( average >=513 && average <=768 ) { 
-    digitalWrite(LED_GREEN,HIGH);  
-  } 
-  else{ 
-    digitalWrite(LED_GREEN,LOW); 
-  } 
-
-  if( average >=769 && average <=1023 ) { 
+  else if(average >=257 && average <=512)
+    digitalWrite(LED_BLUE,HIGH); 
+  else if(average >=513 && average <=768)
+    digitalWrite(LED_GREEN,HIGH);
+  else if(average >=769 && average <=1023)
     digitalWrite(LED_RED,HIGH); 
-  } 
-  else{ 
-    digitalWrite(LED_RED,LOW); 
-  } 
+  else {}
+  
 }  
 
 

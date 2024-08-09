@@ -138,8 +138,8 @@ void ledDisplay() {
   
   else if(average >=769 && average <=1023)
     digitalWrite(LED_RED,HIGH); 
+
   else {}
-  
 }  
 
 
@@ -150,7 +150,7 @@ void displayValue(int average) {
   
   if(average < 1000) 
     temp[0] = INDEX_BLANK;
-  
+    
   else 
     temp[0] = average/1000;
   

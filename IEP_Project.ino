@@ -65,7 +65,7 @@ void loop(){
 }
 
 
-// Getting value from petitometer 
+// Getting value from potentiometer 
 void getValue(){ 
   K1Counter = 0; 
 
@@ -100,7 +100,7 @@ void setK1Counter(){
 } 
 
 
-// Calculating average value of petitometer 
+// Calculating average value of potentiometer 
 int getAverage(){ 
   int sum=0, avg=0;
   for(int i=0; i<=3; i++) 
@@ -111,7 +111,7 @@ int getAverage(){
 } 
 
 
-// Clearing out display in 4 digit segment and previously used LED
+// Clearing out display in 7 segment display and LEDs
 void clearDisplay(){ 
   for(int i=0; i<4; i++) 
     disp.display(i, 16);
@@ -123,7 +123,7 @@ void clearDisplay(){
 } 
 
 
-// Light up one LED based on average petitiometer value
+// Light up one LED based on average potentiometer value
 void ledDisplay() { 
   Serial.println(average);
 

@@ -54,13 +54,13 @@ void setup(){
 void loop(){ 
   if(digitalRead(BUTTONK2) == 0){
     clearDisplay();
-  while(digitalRead(BUTTONK2) == 0) ; 
+    while(digitalRead(BUTTONK2) == 0) ; 
 
-  getValue(); 
-  average = getAverage();
-  ledDisplay(); 
-  displayValue(average);
-  buzzer(); 
+    getValue(); 
+    average = getAverage();
+    ledDisplay(); 
+    displayValue(average);
+    buzzer(); 
   }
 }
 
@@ -127,12 +127,15 @@ void clearDisplay(){
 void ledDisplay() { 
   Serial.println(average);
 
-  if( average > 0 && average <=256 )
+  if(average > 0 && average <=256)
    digitalWrite(LED_YELLOW, HIGH); 
+  
   else if(average >=257 && average <=512)
     digitalWrite(LED_BLUE,HIGH); 
+  
   else if(average >=513 && average <=768)
     digitalWrite(LED_GREEN,HIGH);
+  
   else if(average >=769 && average <=1023)
     digitalWrite(LED_RED,HIGH); 
   else {}
@@ -145,8 +148,12 @@ void displayValue(int average) {
 
   int8_t temp[4];
   
-  if(average < 1000) temp[0] = INDEX_BLANK;
-  else temp[0] = average/1000;
+  if(average < 1000) 
+    temp[0] = INDEX_BLANK;
+  
+  else 
+    temp[0] = average/1000;
+  
   average %= 1000;
   
   temp[1] = average / 100;
@@ -160,6 +167,6 @@ void displayValue(int average) {
 
 // Buzzer will buzz when value is less than 256
 void buzzer() { 
-  if(average<=256) 
+  if(average<=256)
     buz.playTone(NOTE_M1, 3000); 
 } 
